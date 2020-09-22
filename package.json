@@ -7,7 +7,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": "pm2-runtime start ecosystem.config.js --env production",
+    "start": "pm2-runtime start dist/src/index.js",
     "stop": "pm2 stop 0",
     "restart": "pm2 restart 0",
     "build": "tsc",
