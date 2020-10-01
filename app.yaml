@@ -14,3 +14,6 @@
 # [START gae_quickstart_yaml]
 runtime: nodejs12
 # [END gae_quickstart_yaml]
+
+env_variables:
+  GCLOUD_STORAGE_BUCKET: new-music-notification-01

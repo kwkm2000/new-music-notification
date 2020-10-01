@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express'
 import puppeteer from 'puppeteer';
 import fs from 'fs'
 
@@ -12,7 +13,7 @@ interface ReleaseInfoList {
     [key: string]: ReleaseInfo[]
 }
 
-const crawl = async () => {
+export const crawl = async () => {
     const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']})
     const page = await browser.newPage()
     const url = 'https://www.oricon.co.jp/release/single/jp/'
@@ -71,5 +72,3 @@ const crawl = async () => {
 
     await browser.close();
 }
-
-crawl();
