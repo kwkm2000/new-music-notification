@@ -1,5 +1,7 @@
-import singleJSON from '@public/singleReleaseInfo.json'
-export function upload(bucketName = 'new-music-notification-01', filename = '../public/artists.json') {
+// console.log('@public/')
+
+export function upload(bucketName = 'new-music-notification-01', filename = `${__dirname}/../public/artists.json`) {
+    console.log('upload start')
     // [START storage_upload_file]
     /**
      * TODO(developer): Uncomment the following lines before running the sample.
@@ -15,7 +17,8 @@ export function upload(bucketName = 'new-music-notification-01', filename = '../
 
     async function uploadFile() {
         // Uploads a local file to the bucket
-        await storage.bucket(bucketName).upload(singleJSON, {
+        // console.log(singleJSON)
+        await storage.bucket(bucketName).upload(filename, {
             // Support for HTTP requests made with `Accept-Encoding: gzip`
             gzip: true,
             // By setting the option `destination`, you can change the name of the
@@ -28,10 +31,10 @@ export function upload(bucketName = 'new-music-notification-01', filename = '../
             },
         });
 
-        console.log(`${singleJSON} uploaded to ${bucketName}.`);
+        console.log(`uploaded to ${bucketName}.`);
     }
 
-    // uploadFile().catch(console.error);
+    uploadFile().catch(console.error);
     // [END storage_upload_file]
 }
 

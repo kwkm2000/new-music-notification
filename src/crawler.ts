@@ -13,9 +13,40 @@ interface ReleaseInfoList {
     [key: string]: ReleaseInfo[]
 }
 
+async function scrollToBottom(page: puppeteer.Page, viewportHeight: number) {
+    const getScrollHeight = () => {
+        return Promise.resolve(document.documentElement.scrollHeight)
+    }
+
+    let scrollHeight = await page.evaluate(getScrollHeight)
+    let currentPosition = 0
+    let scrollNumber = 0
+
+    while (currentPosition < scrollHeight) {
+        scrollNumber += 1
+        const nextPosition = scrollNumber * viewportHeight
+        await page.evaluate(function (scrollTo) {
+            return Promise.resolve(window.scrollTo(0, scrollTo))
+        }, nextPosition)
+        await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 5000 })
+            .catch(e => console.log('timeout exceed. proceed to next operation'));
+
+        currentPosition = nextPosition;
+        console.log(`scrollNumber: ${scrollNumber}`)
+        console.log(`currentPosition: ${currentPosition}`)
+
+        // 2
+        scrollHeight = await page.evaluate(getScrollHeight)
+        console.log(`ScrollHeight ${scrollHeight}`)
+    }
+}
 export const crawl = async () => {
-    const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']})
+    console.log('crawl start')
+    const viewportHeight = 1200
+    const viewportWidth = 1600
+    const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] })
     const page = await browser.newPage()
+    page.setViewport({ width: viewportWidth, height: viewportHeight })
     const url = 'https://www.oricon.co.jp/release/single/jp/'
     const PAGE_MAX = 12
     const selector = {
@@ -24,6 +55,11 @@ export const crawl = async () => {
     }
     let releaseInfoObj = {}
     await page.goto(url, { waitUntil: 'networkidle0' })
+
+    await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 5000 })
+        .catch(e => console.log('timeout exceed. proceed to next operation'));
+    await scrollToBottom(page, viewportHeight)
+
 
     for (let i = 0; i < PAGE_MAX; i++) {
         if (i > 0) {
@@ -69,6 +105,6 @@ export const crawl = async () => {
         releaseInfoObj = { ...releaseInfoObj, ...result }
         fs.writeFileSync('./public/singleReleaseInfo.json', JSON.stringify(releaseInfoObj))
     }
-
+    console.log('crawl end')
     await browser.close();
 }

@@ -7,6 +7,7 @@ const releaseInfoSingle = require("./api/releaseInfo")
 const artists = require('./api/artists')
 const crawler = require('./crawler')
 const uploadSingle = require('./uploadSingle')
+const test = require('./test')
 
 
 
@@ -28,6 +29,8 @@ app.get("/api/v1/artists", artists.artists);
 app.get('/api/v1/singleCarwl', crawler.crawl)
 
 app.get('/api/v1/updateSingle', uploadSingle.uploadSingle)
+
+app.get('/api/v1/test', test.test)
 
 app.get("/api/v1/releaseInfo", (req, res) => {
   res.json({
