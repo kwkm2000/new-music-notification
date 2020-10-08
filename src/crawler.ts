@@ -28,19 +28,15 @@ async function scrollToBottom(page: puppeteer.Page, viewportHeight: number) {
         await page.evaluate(function (scrollTo) {
             return Promise.resolve(window.scrollTo(0, scrollTo))
         }, nextPosition)
-        await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 5000 })
-            .catch(e => console.log('timeout exceed. proceed to next operation'));
+
 
         currentPosition = nextPosition;
-        console.log(`scrollNumber: ${scrollNumber}`)
-        console.log(`currentPosition: ${currentPosition}`)
 
         // 2
         scrollHeight = await page.evaluate(getScrollHeight)
-        console.log(`ScrollHeight ${scrollHeight}`)
     }
 }
-export const crawl = async () => {
+const crawl = async () => {
     console.log('crawl start')
     const viewportHeight = 1200
     const viewportWidth = 1600
@@ -56,16 +52,16 @@ export const crawl = async () => {
     let releaseInfoObj = {}
     await page.goto(url, { waitUntil: 'networkidle0' })
 
-    await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 5000 })
-        .catch(e => console.log('timeout exceed. proceed to next operation'));
-    await scrollToBottom(page, viewportHeight)
-
 
     for (let i = 0; i < PAGE_MAX; i++) {
         if (i > 0) {
             const nextUrl = `https://www.oricon.co.jp/release/single/jp/p/${i}/`
             await page.goto(nextUrl, { waitUntil: 'networkidle0' })
         }
+
+        await scrollToBottom(page, viewportHeight)
+        await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 10000 })
+        .catch(e => console.log('timeout exceed. proceed to next operation'))
 
         const result = await page.evaluate((selector) => {
             let releaseInfoObject: ReleaseInfoList = {}
@@ -108,3 +104,5 @@ export const crawl = async () => {
     console.log('crawl end')
     await browser.close();
 }
+
+crawl()

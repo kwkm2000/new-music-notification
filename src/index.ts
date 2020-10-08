@@ -26,11 +26,11 @@ app.get("/api/v1/releaseInfo/album", releaseInfoSingle.album);
 
 app.get("/api/v1/artists", artists.artists);
 
-app.get('/api/v1/singleCarwl', crawler.crawl)
+// app.get('/api/v1/singleCarwl', crawler.crawl)
 
-app.get('/api/v1/updateSingle', uploadSingle.uploadSingle)
+// app.get('/api/v1/updateSingle', uploadSingle.uploadSingle)
 
-app.get('/api/v1/test', test.test)
+// app.get('/api/v1/test', test.test)
 
 app.get("/api/v1/releaseInfo", (req, res) => {
   res.json({
