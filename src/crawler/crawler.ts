@@ -12,6 +12,11 @@ interface ReleaseInfo {
 interface ReleaseInfoList {
     [key: string]: ReleaseInfo[]
 }
+console.log('crawl')
+const cdType = process.argv[2] as 'single' | 'alubum'
+console.log('cdType', cdType)
+const url = cdType === 'single' ? 'https://www.oricon.co.jp/release/single/jp/' : 'https://www.oricon.co.jp/release/album/'
+const jsonPath = cdType === 'single' ? './public/singleReleaseInfo.json' : './public/albumReleaseInfo.json'
 
 async function scrollToBottom(page: puppeteer.Page, viewportHeight: number) {
     const getScrollHeight = () => {
@@ -43,7 +48,6 @@ const crawl = async () => {
     const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] })
     const page = await browser.newPage()
     page.setViewport({ width: viewportWidth, height: viewportHeight })
-    const url = 'https://www.oricon.co.jp/release/single/jp/'
     const PAGE_MAX = 12
     const selector = {
         section: "#content-main section",
@@ -55,13 +59,13 @@ const crawl = async () => {
 
     for (let i = 0; i < PAGE_MAX; i++) {
         if (i > 0) {
-            const nextUrl = `https://www.oricon.co.jp/release/single/jp/p/${i}/`
+            const nextUrl = `${url}p/${i}/`
             await page.goto(nextUrl, { waitUntil: 'networkidle0' })
         }
 
         await scrollToBottom(page, viewportHeight)
         await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 10000 })
-        .catch(e => console.log('timeout exceed. proceed to next operation'))
+            .catch(e => console.log('timeout exceed. proceed to next operation'))
 
         const result = await page.evaluate((selector) => {
             let releaseInfoObject: ReleaseInfoList = {}
@@ -99,7 +103,7 @@ const crawl = async () => {
         }, selector.section)
 
         releaseInfoObj = { ...releaseInfoObj, ...result }
-        fs.writeFileSync('./public/singleReleaseInfo.json', JSON.stringify(releaseInfoObj))
+        fs.writeFileSync(jsonPath, JSON.stringify(releaseInfoObj))
     }
     console.log('crawl end')
     await browser.close();

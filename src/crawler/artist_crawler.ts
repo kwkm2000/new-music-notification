@@ -2,7 +2,6 @@
 import puppeteer from 'puppeteer';
 import fs from 'fs'
 
-
 interface Artist {
     name: string
     imgSrc: string
