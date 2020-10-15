@@ -3,12 +3,10 @@ import express from "express"
 
 const PORT = process.env.PORT || 5000
 const app = express()
-// const releaseInfoSingle = require("./api/releaseInfo")
 import { single, album } from "./api/releaseInfo"
 import { artists } from './api/artists'
-// const crawler = require('./crawler')
-// const uploadSingle = require('./uploadSingle')
-// const test = require('./test')
+import { uploadSingle } from './uploadSingle'
+
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*")
@@ -25,9 +23,7 @@ app.get("/api/v1/releaseInfo/album", album);
 
 app.get("/api/v1/artists", artists);
 
-// app.get('/api/v1/singleCarwl', crawler.crawl)
-
-// app.get('/api/v1/updateSingle', uploadSingle.uploadSingle)
+app.get('/api/v1/updateSingle', uploadSingle)
 
 // app.get('/api/v1/test', test.test)
 
