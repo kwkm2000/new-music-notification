@@ -18,6 +18,15 @@ console.log('cdType', cdType)
 const url = cdType === 'single' ? 'https://www.oricon.co.jp/release/single/jp/' : 'https://www.oricon.co.jp/release/album/'
 const jsonPath = cdType === 'single' ? './public/singleReleaseInfo.json' : './public/albumReleaseInfo.json'
 
+const sortObject = (obj: ReleaseInfoList): ReleaseInfoList => {
+    const newObj: ReleaseInfoList = {}
+    const dates = Object.keys(obj).sort()
+    dates.forEach(date => {
+        newObj[date] = obj[date]
+    })
+    return newObj
+}
+
 async function scrollToBottom(page: puppeteer.Page, viewportHeight: number) {
     const getScrollHeight = () => {
         return Promise.resolve(document.documentElement.scrollHeight)
@@ -103,7 +112,8 @@ const crawl = async () => {
         }, selector.section)
 
         releaseInfoObj = { ...releaseInfoObj, ...result }
-        fs.writeFileSync(jsonPath, JSON.stringify(releaseInfoObj))
+        const sortedObject = sortObject(releaseInfoObj)
+        fs.writeFileSync(jsonPath, JSON.stringify(sortedObject))
     }
     console.log('crawl end')
     await browser.close();
