@@ -1,4 +1,3 @@
-import { Request, Response, NextFunction } from 'express'
 import puppeteer from 'puppeteer';
 import fs from 'fs'
 
@@ -13,10 +12,6 @@ interface ReleaseInfoList {
     [key: string]: ReleaseInfo[]
 }
 console.log('crawl')
-const cdType = process.argv[2] as 'single' | 'alubum'
-console.log('cdType', cdType)
-const url = cdType === 'single' ? 'https://www.oricon.co.jp/release/single/jp/' : 'https://www.oricon.co.jp/release/album/'
-const jsonPath = cdType === 'single' ? './public/singleReleaseInfo.json' : './public/albumReleaseInfo.json'
 
 const sortObject = (obj: ReleaseInfoList): ReleaseInfoList => {
     const newObj: ReleaseInfoList = {}
@@ -50,8 +45,10 @@ async function scrollToBottom(page: puppeteer.Page, viewportHeight: number) {
         scrollHeight = await page.evaluate(getScrollHeight)
     }
 }
-const crawl = async () => {
+export const crawl = async (cdType: 'single' | 'album') => {
     console.log('crawl start')
+    const url = cdType === 'single' ? 'https://www.oricon.co.jp/release/single/jp/' : 'https://www.oricon.co.jp/release/album/'
+    const jsonPath = cdType === 'single' ? './public/singleReleaseInfo.json' : './public/albumReleaseInfo.json'
     const viewportHeight = 1200
     const viewportWidth = 1600
     const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] })
@@ -119,4 +116,4 @@ const crawl = async () => {
     await browser.close();
 }
 
-crawl()
+

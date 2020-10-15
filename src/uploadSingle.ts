@@ -1,9 +1,10 @@
-import { Request, Response } from 'express'
-// import { crawl } from './crawler'
+import { NextFunction, Request, Response } from 'express'
+import { crawl } from './crawler/crawler'
 import { upload } from './uploadJson'
 
-export function uploadSingle(req: Request, res: Response) {
+export const  uploadSingle = async (req: Request, res: Response, next: NextFunction) => {
     console.log('uploadSingle')
-    // crawl()
-    // upload()
+    await crawl('single')
+    upload()
+    next();
 }

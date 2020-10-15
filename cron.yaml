@@ -1,0 +1,4 @@
+cron:
+- description: "daily summary job"
+  url: /api/v1/updateSingle
+  schedule: every 24 hours

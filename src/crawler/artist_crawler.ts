@@ -7,7 +7,7 @@ interface Artist {
     imgSrc: string
 }
 
-const crawl = async () => {
+export const crawl = async () => {
     const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] })
     const page = await browser.newPage()
     const url = 'http://j-lyric.net/artist/p1.html'
@@ -53,4 +53,4 @@ const crawl = async () => {
     await browser.close();
 }
 
-crawl();
+// crawl();

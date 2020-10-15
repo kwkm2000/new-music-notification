@@ -25,6 +25,4 @@ app.get("/api/v1/artists", artists);
 
 app.get('/api/v1/updateSingle', uploadSingle)
 
-// app.get('/api/v1/test', test.test)
-
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));

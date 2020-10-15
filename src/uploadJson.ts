@@ -1,6 +1,4 @@
-// console.log('@public/')
-
-export function upload(bucketName = 'new-music-notification-01', filename = `${__dirname}/../public/artists.json`) {
+export function upload(bucketName = 'new-music-notification-01', filename = `${__dirname}/../public/singleReleaseInfo.json`) {
     console.log('upload start')
     // [START storage_upload_file]
     /**
@@ -18,6 +16,7 @@ export function upload(bucketName = 'new-music-notification-01', filename = `${_
     async function uploadFile() {
         // Uploads a local file to the bucket
         // console.log(singleJSON)
+        console.log('filename',filename)
         await storage.bucket(bucketName).upload(filename, {
             // Support for HTTP requests made with `Accept-Encoding: gzip`
             gzip: true,
