@@ -3,8 +3,9 @@ import express from "express"
 
 const PORT = process.env.PORT || 5000
 const app = express()
-const releaseInfoSingle = require("./api/releaseInfo")
-const artists = require('./api/artists')
+// const releaseInfoSingle = require("./api/releaseInfo")
+import { single, album } from "./api/releaseInfo"
+import { artists } from './api/artists'
 // const crawler = require('./crawler')
 // const uploadSingle = require('./uploadSingle')
 // const test = require('./test')
@@ -18,11 +19,11 @@ app.use((req, res, next) => {
   next()
 })
 
-app.get("/api/v1/releaseInfo/single", releaseInfoSingle.single);
+app.get("/api/v1/releaseInfo/single", single);
 
-app.get("/api/v1/releaseInfo/album", releaseInfoSingle.album);
+app.get("/api/v1/releaseInfo/album", album);
 
-app.get("/api/v1/artists", artists.artists);
+app.get("/api/v1/artists", artists);
 
 // app.get('/api/v1/singleCarwl', crawler.crawl)
 
