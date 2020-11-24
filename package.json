@@ -14,7 +14,8 @@
     "dev": "NODE_ENV=develop ts-node src/index.ts",
     "test": "node test.js",
     "deploy": "yarn build && gcloud app deploy",
-    "crawl:single": "node dist/src/crawler/crawler.js",
+    "crawl:single": "node dist/src/crawler/crawler.js single",
+    "crawl:album": "node dist/src/crawler/crawler.js album",
     "crawl:artist": "node dist/src/crawler/artist_crawler.js"
   },
   "dependencies": {
